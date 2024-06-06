@@ -1,3 +1,4 @@
+using Challenge.Bravo.Api.Helpers;
 using Challenge.Bravo.Api.Models;
 using System.Net.Http;
 
@@ -19,6 +20,33 @@ namespace Challenge.Bravo.Api.Services
             _fiatConvertService = fiatConvertService;
             httpClient.BaseAddress = new Uri("https://api.alternative.me/v2/ticker/");
             _httpClient = httpClient;
+        }
+
+        public async Task<double> ConvertBitCoin(string from, string to, double amount, List<Currency> fictionsCurrencies)
+        {
+            if (CheckCurrencyType.IsBitCoinCurrency(from) && CheckCurrencyType.IsFiatCurrency(to))
+            {
+                return await ConvertBitCoinToFiat(from, to, amount);
+            }
+
+            if (CheckCurrencyType.IsFiatCurrency(from) && CheckCurrencyType.IsBitCoinCurrency(to))
+            {
+                return await ConvertFiatToBitCoin(from, to, amount);
+            }
+
+            if (CheckCurrencyType.IsBitCoinCurrency(from) && CheckCurrencyType.IsFictionCurrency(to, fictionsCurrencies))
+            {
+                var fictionCurrency = fictionsCurrencies.First(f => f.Code == to);
+                return await ConvertBitCoinToFiction(from, fictionCurrency.CurrencyValues.QuoteDollarPrice, amount);
+            }
+
+            if (CheckCurrencyType.IsFictionCurrency(from, fictionsCurrencies) && CheckCurrencyType.IsBitCoinCurrency(to))
+            {
+                var fictionCurrency = fictionsCurrencies.First(f => f.Code == from);
+                return await ConvertFictionToBitCoin(fictionCurrency.CurrencyValues.QuoteDollarPrice, to, amount);
+            }
+
+            throw new Exception("Currency not supported");
         }
 
         public async Task<double> ConvertBitCoinToFiat(string from, string to, double amount)
@@ -53,6 +81,30 @@ namespace Challenge.Bravo.Api.Services
 
             //calculate amount in dollar to bitcoin
             return amountInDollar / bitcoinValueInDollar;
+        }
+
+        public async Task<double> ConvertFictionToBitCoin(double fictionValueInDollar, string to, double amount)
+        {
+            //get bitcoin (BTC or ETH) value in dollar
+            var bitcoinValueInDollar = await GetBitCoinValueInDollar(to);
+
+            //convert 'from' fiction currency amount in dollar amount
+            double amountInDollar = fictionValueInDollar * amount;
+
+            //calculate amount in dollar to bitcoin
+            return amountInDollar / bitcoinValueInDollar;
+        }
+
+        public async Task<double> ConvertBitCoinToFiction(string from, double fictionValueInDollar, double amount)
+        {
+            //get bitcoin (BTC or ETH) value in dollar
+            var bitcoinValueInDollar = await GetBitCoinValueInDollar(from);
+
+            //amount de bitcoins in dollar
+            var amountBitCoinsInDollar = amount * bitcoinValueInDollar;
+
+            //convert value in dollar to fiction currency (ex: Dungeons & Dragons)
+            return amountBitCoinsInDollar / fictionValueInDollar;
         }
 
         public async Task<double> GetBitCoinValueInDollar(string btcSymbol)

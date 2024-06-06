@@ -48,3 +48,4 @@ C:\Users\rafae\source\repos\challenge-bravo\Challenge.Currency.Api\obj\Debug\net
 C:\Users\rafae\source\repos\challenge-bravo\Challenge.Currency.Api\obj\Debug\net8.0\Challenge.Bravo.Api.pdb
 C:\Users\rafae\source\repos\challenge-bravo\Challenge.Currency.Api\obj\Debug\net8.0\Challenge.Bravo.Api.genruntimeconfig.cache
 C:\Users\rafae\source\repos\challenge-bravo\Challenge.Currency.Api\obj\Debug\net8.0\ref\Challenge.Bravo.Api.dll
+C:\Users\rafae\source\repos\challenge-bravo\Challenge.Currency.Api\bin\Debug\net8.0\AutoMapper.dll

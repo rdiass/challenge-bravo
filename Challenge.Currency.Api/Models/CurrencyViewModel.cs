@@ -1,6 +1,6 @@
 namespace Challenge.Bravo.Api.Models
 {
-    public class Currency : Entity
+    public class CurrencyViewModel
     {
         public string Code { get; set; }
 

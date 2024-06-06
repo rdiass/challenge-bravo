@@ -23,5 +23,10 @@ namespace Challenge.Bravo.Api.Helpers
             ];
             return _fiatCurrencies.Any(a => a.Symbol == currencyCode);
         }
+
+        public static bool IsFictionCurrency(string currencyCode, List<Currency> currencies)
+        {
+            return currencies.Any(a => a.Code == currencyCode);
+        }
     }
 }

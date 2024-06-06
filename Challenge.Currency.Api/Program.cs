@@ -1,3 +1,4 @@
+using Challenge.Bravo.Api.AutoMapper;
 using Challenge.Bravo.Api.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ builder.Services.AddApiConfiguration();
 builder.Services.AddMongoDbConfig(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();
 builder.Services.RegisterServices();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 var app = builder.Build();
 

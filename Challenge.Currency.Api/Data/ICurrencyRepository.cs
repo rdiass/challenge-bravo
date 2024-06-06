@@ -4,5 +4,6 @@ namespace Challenge.Bravo.Api.Data
 {
     public interface ICurrencyRepository : IRepository<Currency>
     {
+        Task<List<Currency>> GetByCodes(List<string> codes);
     }
 }

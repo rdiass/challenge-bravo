@@ -8,9 +8,10 @@ namespace Challenge.Bravo.Api.Configuration
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
-            services.AddScoped<CurrencyService>();
             services.AddScoped<FiatConvertService>();
             services.AddScoped<BitCoinConvertService>();
+            services.AddScoped<FictionCurrencyService>();
+            services.AddScoped<CurrencyService>();
             services.AddHttpClient<BitCoinConvertService>();
         }
     }

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "AHSMkEy0qj0=",
+  "dgSpecHash": "1Bw2UU/aVPk=",
   "success": true,
   "projectFilePath": "C:\\Users\\rafae\\source\\repos\\challenge-bravo\\Challenge.Currency.Api\\Challenge.Bravo.Api.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\rafae\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",

@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Challenge.Bravo.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4ff604586f0f94d7db9e28d491054653cffc6a0d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+85173f742a11413f21dea90d098647fa277e0b70")]
 [assembly: System.Reflection.AssemblyProductAttribute("Challenge.Bravo.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Challenge.Bravo.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

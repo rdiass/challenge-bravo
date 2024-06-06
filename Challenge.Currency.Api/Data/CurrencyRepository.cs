@@ -36,6 +36,11 @@ namespace Challenge.Bravo.Api.Data
             return await _currencyDbContext.Currencies.Where(x => x.Id == new ObjectId(id)).FirstOrDefaultAsync();
         }
 
+        public async Task<List<Currency>> GetByCodes(List<string> codes)
+        {
+            return await _currencyDbContext.Currencies.Where(x => codes.Contains(x.Code)).ToListAsync();
+        }
+
         public async Task RemoveAsync(string id)
         {
             var currencyToDelete = _currencyDbContext.Currencies.FirstOrDefault(c => c.Id == new ObjectId(id));
