@@ -11,7 +11,7 @@ namespace CurrencyConverter.Api.Configuration
             services.AddScoped<FiatConvertService>();
             services.AddScoped<BitCoinConvertService>();
             services.AddScoped<FictionCurrencyService>();
-            services.AddScoped<CurrencyService>();
+            services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddHttpClient<BitCoinConvertService>();
         }
     }

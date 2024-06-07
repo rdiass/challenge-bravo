@@ -80,7 +80,7 @@ namespace CurrencyConverter.WebApp.MVC.Controllers
                 _currencies.Add(new CurrencyCode(currency.Code, "", $"{currency.Code} - {currency.Name}"));
             }
 
-            SelectList listItems = new SelectList(_currencies, "Code", "Name", "");
+            var listItems = new SelectList(_currencies, "Code", "Name", "");
             ViewBag.SelectedList = listItems;
         }
 

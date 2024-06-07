@@ -1,4 +1,12 @@
 services:
+    
+  web-api:
+    container_name: web-api
+    image: web-api
+    build:
+      context: CurrencyConverter\src\web\CurrencyConverter.WebApp.MVC # replace with the actual name of your project
+      dockerfile: Dockerfile
+
   mongo:
     image: mongo
     container_name: mongo
@@ -6,5 +14,6 @@ services:
       - 27017:27017
     volumes:
       - mongodbdata:/data/db
+
 volumes:
   mongodbdata:

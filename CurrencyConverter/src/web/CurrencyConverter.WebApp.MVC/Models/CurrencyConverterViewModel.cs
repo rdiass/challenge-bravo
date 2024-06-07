@@ -15,7 +15,7 @@ public class CurrencyConverterViewModel
     [Required(ErrorMessage = "The {0} field is required")]
     public double Amount { get; set; }
 
-    public float Result { get; set; }
+    public double Result { get; set; }
 
     public bool Validate(CurrencyConverterViewModel currencyConverterViewModel)
     {

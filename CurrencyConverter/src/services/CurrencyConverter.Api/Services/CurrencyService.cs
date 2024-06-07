@@ -5,7 +5,7 @@ using CurrencyConverter.Api.Models;
 
 namespace CurrencyConverter.Api.Services
 {
-    public class CurrencyService
+    public class CurrencyService: ICurrencyService
     {
         private readonly ICurrencyRepository _currencyRepository;
         private readonly FiatConvertService _fiatConvertService;

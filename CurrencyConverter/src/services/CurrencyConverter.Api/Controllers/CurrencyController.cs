@@ -2,6 +2,7 @@ using CurrencyConverter.Api.Models;
 using CurrencyConverter.Api.Services;
 using CurrencyConverter.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace CurrencyConverter.Api.Controllers
 {
@@ -9,16 +10,31 @@ namespace CurrencyConverter.Api.Controllers
     [Route("api/converter")]
     public class CurrencyController : ControllerBase
     {
-        private readonly CurrencyService _currencyService;
+        private readonly ICurrencyService _currencyService;
 
-        public CurrencyController(CurrencyService currencyService) => _currencyService = currencyService;
+        public CurrencyController(ICurrencyService currencyService) => _currencyService = currencyService;
 
         [HttpGet]
         [Route("from/{from}/to/{to}/amount/{amount}")]
         public async Task<CurrencyConverterResponse> ConvertCurrency(string from, string to, double amount)
         {
-            var result = await _currencyService.ConvertCurrency(from, to, amount);
-            return new CurrencyConverterResponse { Result = (float)result };
+            try
+            {
+                var result = await _currencyService.ConvertCurrency(from, to, amount);
+                return new CurrencyConverterResponse { Result = (float)result };
+            }
+            catch (Exception ex)
+            {
+                var responseResult = new ResponseResult
+                {
+                    Status = (int)HttpStatusCode.BadRequest,
+                    Errors = new ResponseErrorMessages
+                    {
+                        Messages = [ex.Message]
+                    }
+                };
+                return new CurrencyConverterResponse { ResponseResult = responseResult };
+            }
         }
 
         [HttpGet]
