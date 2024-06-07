@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace CurrencyConverter.Api.Models
+namespace CurrencyConverter.Core.Models
 {
     public class CurrencyValues
     {

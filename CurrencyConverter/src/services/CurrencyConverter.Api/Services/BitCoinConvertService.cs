@@ -37,13 +37,13 @@ namespace CurrencyConverter.Api.Services
             if (CheckCurrencyType.IsBitCoinCurrency(from) && CheckCurrencyType.IsFictionCurrency(to, fictionsCurrencies))
             {
                 var fictionCurrency = fictionsCurrencies.First(f => f.Code == to);
-                return await ConvertBitCoinToFiction(from, fictionCurrency.CurrencyValues.QuoteDollarPrice, amount);
+                return await ConvertBitCoinToFiction(from, fictionCurrency.QuoteDollarPrice, amount);
             }
 
             if (CheckCurrencyType.IsFictionCurrency(from, fictionsCurrencies) && CheckCurrencyType.IsBitCoinCurrency(to))
             {
                 var fictionCurrency = fictionsCurrencies.First(f => f.Code == from);
-                return await ConvertFictionToBitCoin(fictionCurrency.CurrencyValues.QuoteDollarPrice, to, amount);
+                return await ConvertFictionToBitCoin(fictionCurrency.QuoteDollarPrice, to, amount);
             }
 
             throw new Exception("Currency not supported");

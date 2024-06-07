@@ -49,7 +49,6 @@ namespace CurrencyConverter.Api.Services
             return _mapper.Map<List<CurrencyViewModel>>(currenciesModel);
         }
        
-
         public async Task<CurrencyViewModel?> GetAsync(string id)
         {
             var currencyModel = await _currencyRepository.GetAsync(id);

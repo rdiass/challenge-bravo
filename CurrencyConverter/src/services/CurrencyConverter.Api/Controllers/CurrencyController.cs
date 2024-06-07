@@ -1,11 +1,12 @@
 using CurrencyConverter.Api.Models;
 using CurrencyConverter.Api.Services;
+using CurrencyConverter.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyConverter.Api.Controllers
 {
     [ApiController]
-    [Route("api/currency")]
+    [Route("api/converter")]
     public class CurrencyController : ControllerBase
     {
         private readonly CurrencyService _currencyService;
@@ -14,28 +15,15 @@ namespace CurrencyConverter.Api.Controllers
 
         [HttpGet]
         [Route("from/{from}/to/{to}/amount/{amount}")]
-        public async Task<double> ConvertCurrency(string from, string to, double amount)
+        public async Task<CurrencyConverterResponse> ConvertCurrency(string from, string to, double amount)
         {
-
-            return await _currencyService.ConvertCurrency(from, to, amount);
+            var result = await _currencyService.ConvertCurrency(from, to, amount);
+            return new CurrencyConverterResponse { Result = (float)result };
         }
 
         [HttpGet]
         public async Task<List<CurrencyViewModel>> Get() =>
             await _currencyService.GetAsync();
-
-        [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<CurrencyViewModel>> Get(string id)
-        {
-            var currency = await _currencyService.GetAsync(id);
-
-            if (currency is null)
-            {
-                return NotFound();
-            }
-
-            return currency;
-        }
 
         [HttpPost]
         public async Task<IActionResult> Post(CurrencyViewModel newCurrency)
