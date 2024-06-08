@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace CurrencyConverter.Api.Services
 {
-    public class FiatConvertService
+    public class FiatConvertService : IFiatConvertService
     {
         private readonly Freecurrencyapi _freecurrencyapi;
 
@@ -12,13 +12,19 @@ namespace CurrencyConverter.Api.Services
 
         public double ConvertFiatToFiat(string from, string to, double amount)
         {
-            var currency = _freecurrencyapi.Latest(from, to);
+            try
+            {
+                var currency = _freecurrencyapi.Latest(from, to);
+                var quote = JsonSerializer.Deserialize<Quote>(currency);
+                var quoteValue = quote.data[to];
+                var response = amount * quoteValue;
 
-            var quote = JsonSerializer.Deserialize<Quote>(currency);
-            var quoteValue = quote.data[to];
-            var response = amount * quoteValue;
-
-            return response;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Not supported currency: " + ex.Message);
+            }
         }
     }
 }

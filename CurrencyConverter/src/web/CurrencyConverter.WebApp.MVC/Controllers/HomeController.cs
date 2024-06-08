@@ -97,7 +97,7 @@ namespace CurrencyConverter.WebApp.MVC.Controllers
 
         protected bool ResponseHasErrors(ResponseResult response)
         {
-            if (response != null && response.Errors.Messages.Count != 0)
+            if (response != null && response.Errors != null && response.Errors.Messages.Count != 0)
             {
                 foreach (var error in response.Errors.Messages)
                 {

@@ -4,11 +4,11 @@ using CurrencyConverter.Api.Models;
 
 namespace CurrencyConverter.Api.Services
 {
-    public class FictionCurrencyService
+    public class FictionCurrencyService : IFictionCurrencyService
     {
         private readonly ICurrencyRepository _currencyRepository;
-        private readonly FiatConvertService _fiatConvertService;
-        public FictionCurrencyService(ICurrencyRepository currencyRepository, FiatConvertService fiatConvertService, BitCoinConvertService bitCoinConvertService)
+        private readonly IFiatConvertService _fiatConvertService;
+        public FictionCurrencyService(ICurrencyRepository currencyRepository, IFiatConvertService fiatConvertService, IBitCoinConvertService bitCoinConvertService)
         {
             _currencyRepository = currencyRepository;
             _fiatConvertService = fiatConvertService;

@@ -8,11 +8,11 @@ namespace CurrencyConverter.Api.Configuration
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
-            services.AddScoped<FiatConvertService>();
-            services.AddScoped<BitCoinConvertService>();
-            services.AddScoped<FictionCurrencyService>();
+            services.AddScoped<IFiatConvertService, FiatConvertService>();
+            services.AddScoped<IBitCoinConvertService, BitCoinConvertService>();
+            services.AddScoped<IFictionCurrencyService, FictionCurrencyService>();
             services.AddScoped<ICurrencyService, CurrencyService>();
-            services.AddHttpClient<BitCoinConvertService>();
+            services.AddHttpClient<IBitCoinConvertService, BitCoinConvertService>();
         }
     }
 }

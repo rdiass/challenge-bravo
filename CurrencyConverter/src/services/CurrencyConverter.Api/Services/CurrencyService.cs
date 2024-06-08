@@ -8,15 +8,15 @@ namespace CurrencyConverter.Api.Services
     public class CurrencyService: ICurrencyService
     {
         private readonly ICurrencyRepository _currencyRepository;
-        private readonly FiatConvertService _fiatConvertService;
-        private readonly BitCoinConvertService _bitcoinConvertService;
-        private readonly FictionCurrencyService _fictionCurrencyService;
+        private readonly IFiatConvertService _fiatConvertService;
+        private readonly IBitCoinConvertService _bitcoinConvertService;
+        private readonly IFictionCurrencyService _fictionCurrencyService;
         private readonly IMapper _mapper;
 
         public CurrencyService(ICurrencyRepository currencyRepository,
-            BitCoinConvertService bitcoinConvertService,
-            FiatConvertService fiatConvertService,
-            FictionCurrencyService fictionCurrencyService,
+            IBitCoinConvertService bitcoinConvertService,
+            IFiatConvertService fiatConvertService,
+            IFictionCurrencyService fictionCurrencyService,
             IMapper mapper)
         {
             _fiatConvertService = fiatConvertService;

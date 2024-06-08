@@ -21,7 +21,8 @@ namespace CurrencyConverter.Api.Controllers
             try
             {
                 var result = await _currencyService.ConvertCurrency(from, to, amount);
-                return new CurrencyConverterResponse { Result = (float)result };
+                var responseResult = new ResponseResult { Status = (int)HttpStatusCode.OK };
+                return new CurrencyConverterResponse { Result = (float)result, ResponseResult = responseResult };
             }
             catch (Exception ex)
             {

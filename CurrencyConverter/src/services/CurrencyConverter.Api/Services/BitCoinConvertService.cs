@@ -4,9 +4,9 @@ using System.Net.Http;
 
 namespace CurrencyConverter.Api.Services
 {
-    public class BitCoinConvertService
+    public class BitCoinConvertService : IBitCoinConvertService
     {
-        private readonly FiatConvertService _fiatConvertService;
+        private readonly IFiatConvertService _fiatConvertService;
         private readonly HttpClient _httpClient;
 
         public List<CurrencyCode> _bitCoinCurrencies =
@@ -15,7 +15,7 @@ namespace CurrencyConverter.Api.Services
             new CurrencyCode("ETH", "ethereum/")
         ];
 
-        public BitCoinConvertService(FiatConvertService fiatConvertService, HttpClient httpClient)
+        public BitCoinConvertService(IFiatConvertService fiatConvertService, HttpClient httpClient)
         {
             _fiatConvertService = fiatConvertService;
             httpClient.BaseAddress = new Uri("https://api.alternative.me/v2/ticker/");
@@ -107,7 +107,7 @@ namespace CurrencyConverter.Api.Services
             return amountBitCoinsInDollar / fictionValueInDollar;
         }
 
-        public async Task<double> GetBitCoinValueInDollar(string btcSymbol)
+        private async Task<double> GetBitCoinValueInDollar(string btcSymbol)
         {
             var bitcoin = _bitCoinCurrencies.First(a => a.Symbol == btcSymbol);
             var bitcoinValueInDollar = await GetBitCoinDollarQuoteValue(bitcoin.Path);
