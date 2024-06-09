@@ -2,7 +2,10 @@ using CurrencyConverter.Api.Models;
 using CurrencyConverter.Api.Services;
 using CurrencyConverter.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 using System.Net;
+using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace CurrencyConverter.Api.Controllers
 {
@@ -11,8 +14,16 @@ namespace CurrencyConverter.Api.Controllers
     public class CurrencyController : ControllerBase
     {
         private readonly ICurrencyService _currencyService;
+        private readonly HttpClient _client;
+        private readonly IDatabase _redis;
 
-        public CurrencyController(ICurrencyService currencyService) => _currencyService = currencyService;
+        public CurrencyController(ICurrencyService currencyService, HttpClient client, IConnectionMultiplexer muxer)
+        {
+            _currencyService = currencyService;
+            _client = client;
+            _client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("weatherCachingApp", "1.0"));
+            _redis = muxer.GetDatabase();
+        } 
 
         [HttpGet]
         [Route("from/{from}/to/{to}/amount/{amount}")]
@@ -20,9 +31,23 @@ namespace CurrencyConverter.Api.Controllers
         {
             try
             {
-                var result = await _currencyService.ConvertCurrency(from, to, amount);
-                var responseResult = new ResponseResult { Status = (int)HttpStatusCode.OK };
-                return new CurrencyConverterResponse { Result = (float)result, ResponseResult = responseResult };
+                var keyName = $"converter:{from},{to}";
+                var json = await _redis.StringGetAsync(keyName);
+                var response = new CurrencyConverterResponse();
+
+                if (string.IsNullOrEmpty(json))
+                {
+                    var convertion = await _currencyService.ConvertCurrency(from, to, amount);
+                    response.Result = convertion;
+                    json = JsonSerializer.Serialize(response);
+                    var setTask = _redis.StringSetAsync(keyName, json);
+                    var expireTask = _redis.KeyExpireAsync(keyName, TimeSpan.FromSeconds(3600));
+                    await Task.WhenAll(setTask, expireTask);
+                }
+
+                response = JsonSerializer.Deserialize<CurrencyConverterResponse>(json);
+                response.ResponseResult = new ResponseResult { Status = (int)HttpStatusCode.OK };
+                return response;
             }
             catch (Exception ex)
             {

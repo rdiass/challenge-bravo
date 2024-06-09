@@ -1,5 +1,6 @@
 using CurrencyConverter.Api.AutoMapper;
 using CurrencyConverter.Api.Configuration;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddMongoDbConfig(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();
 builder.Services.RegisterServices();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddRedisClientConfig(builder.Configuration);
 
 var app = builder.Build();
 
