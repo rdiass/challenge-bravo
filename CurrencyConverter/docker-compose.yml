@@ -1,0 +1,59 @@
+version: '3.4'
+
+services:
+  currencyconverter.api:
+    image: ${DOCKER_REGISTRY-}currencyconverterapi
+    ports:
+      - "5100:80"
+    expose:
+      - "80"
+    build:
+      context: .
+      dockerfile: src/services/CurrencyConverter.Api/Dockerfile
+    depends_on:
+      - redis
+      - mongo
+    links:
+      - redis
+      - mongo
+
+  currencyconverter.webapp.mvc:
+    image: ${DOCKER_REGISTRY-}currencyconverterwebappmvc
+    expose:
+      - "80"
+    ports:
+      - "5101:80"
+    build:
+      context: .
+      dockerfile: src/web/CurrencyConverter.WebApp.MVC/Dockerfile
+    depends_on:
+      - currencyconverter.api
+    links:
+      - currencyconverter.api
+
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodbdata:/data/db
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./volumes/redis.data:/usr/share/root/redis
+      - ./volumes/redis.conf:/usr/share/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=Teste@123
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16   
+    command: [ "redis-server", "/usr/share/redis/redis.conf"]
+
+volumes:
+  mongodbdata:
