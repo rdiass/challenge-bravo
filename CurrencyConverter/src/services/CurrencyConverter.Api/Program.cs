@@ -12,7 +12,12 @@ builder.Services.RegisterServices();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddRedisClientConfig(builder.Configuration);
 
+builder.Services.AddHealthChecks();
+
+
 var app = builder.Build();
+
+app.MapHealthChecks("/healthz");
 
 // Configure the HTTP request pipeline.
 app.UseSwaggerConfiguration();

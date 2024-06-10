@@ -4,19 +4,19 @@ services:
   currencyconverter.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_URLS=http://0.0.0.0:5100
     ports:
-      - "5100:80"
+      - "5100:5100"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
   currencyconverter.webapp.mvc:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConverterApiUrl=http://currencyconverter.api/api/converter/
+      - ASPNETCORE_URLS=http://0.0.0.0:5101
+      - ConverterApiUrl=http://currencyconverter.api:5100/api/converter/
     ports:
-      - "5101:80"
+      - "5101:5101"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro

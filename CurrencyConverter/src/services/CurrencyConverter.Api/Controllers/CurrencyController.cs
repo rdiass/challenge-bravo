@@ -58,6 +58,13 @@ namespace CurrencyConverter.Api.Controllers
         public async Task<List<CurrencyViewModel>> Get() =>
             await _currencyService.GetAsync();
 
+        [HttpGet("machine")]
+        public IActionResult GetMachine()
+        {
+            var MachineName = Environment.MachineName;
+            return Ok(new { Status = "online", MachineName });
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(CurrencyViewModel newCurrency)
         {
