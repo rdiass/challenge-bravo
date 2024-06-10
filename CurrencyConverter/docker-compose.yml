@@ -11,11 +11,60 @@ services:
       - mynet
     depends_on:
       - currencyconverter.api
+      - currencyconverter.api-2
 
   currencyconverter.api:
     image: ${DOCKER_REGISTRY-}currencyconverterapi
     ports:
       - "5100:5100"
+    networks:
+      - mynet
+    build:
+      context: .
+      dockerfile: src/services/CurrencyConverter.Api/Dockerfile
+    depends_on:
+      - redis
+      - mongo
+    links:
+      - redis
+      - mongo
+
+  currencyconverter.api-2:
+    image: ${DOCKER_REGISTRY-}currencyconverterapi
+    ports:
+      - "5102:5102"
+    networks:
+      - mynet
+    build:
+      context: .
+      dockerfile: src/services/CurrencyConverter.Api/Dockerfile
+    depends_on:
+      - redis
+      - mongo
+    links:
+      - redis
+      - mongo
+
+  currencyconverter.api-3:
+    image: ${DOCKER_REGISTRY-}currencyconverterapi
+    ports:
+      - "5103:5103"
+    networks:
+      - mynet
+    build:
+      context: .
+      dockerfile: src/services/CurrencyConverter.Api/Dockerfile
+    depends_on:
+      - redis
+      - mongo
+    links:
+      - redis
+      - mongo
+
+  currencyconverter.api-4:
+    image: ${DOCKER_REGISTRY-}currencyconverterapi
+    ports:
+      - "5104:5104"
     networks:
       - mynet
     build:

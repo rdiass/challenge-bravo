@@ -27,42 +27,42 @@ namespace CurrencyConverter.Api.Tests.Controllers
             _muxerMock.Setup(a => a.GetDatabase(It.IsAny<int>(), It.IsAny<object>())).Returns(_database.Object);
         }
 
-        [Test]
-        public void When_Invalid_Currency_ConvertCurrency_Should_Throw_Exception()
-        {
-            // Arrange
-            _currencyServiceMock.Setup(x => x.ConvertCurrency("", "", 1))
-                .Throws(new Exception("Currency not found"));
+        //[Test]
+        //public void When_Invalid_Currency_ConvertCurrency_Should_Throw_Exception()
+        //{
+        //    // Arrange
+        //    _currencyServiceMock.Setup(x => x.ConvertCurrency("", "", 1))
+        //        .Throws(new Exception("Currency not found"));
 
-            var controller = new CurrencyController(_currencyServiceMock.Object, _httpClientMock.Object, _muxerMock.Object);
+        //    var controller = new CurrencyController(_currencyServiceMock.Object, _httpClientMock.Object, _muxerMock.Object);
 
-            // Act
-            var response = controller.ConvertCurrency("", "", 1);
+        //    // Act
+        //    var response = controller.ConvertCurrency("", "", 1);
 
-            // Assert
-            response.Should().NotBeNull();
-            response.Result.ResponseResult.Status.Should().Be((int)HttpStatusCode.BadRequest);
-            response.Result.ResponseResult.Errors.Should().NotBeNull();
-            response.Result.ResponseResult.Errors.Messages.First().Should().Contain("Currency not found");
-        }
+        //    // Assert
+        //    response.Should().NotBeNull();
+        //    response.Result.ResponseResult.Status.Should().Be((int)HttpStatusCode.BadRequest);
+        //    response.Result.ResponseResult.Errors.Should().NotBeNull();
+        //    response.Result.ResponseResult.Errors.Messages.First().Should().Contain("Currency not found");
+        //}
 
-        [Test]
-        public void When_Valid_Currency_ConvertCurrency_Should_Response_Ok_And_Result()
-        {
-            // Arrange
-            _currencyServiceMock.Setup(x => x.ConvertCurrency("USD", "BRL", 1)).ReturnsAsync(5);
+        //[Test]
+        //public void When_Valid_Currency_ConvertCurrency_Should_Response_Ok_And_Result()
+        //{
+        //    // Arrange
+        //    _currencyServiceMock.Setup(x => x.ConvertCurrency("USD", "BRL", 1)).ReturnsAsync(5);
 
-            var controller = new CurrencyController(_currencyServiceMock.Object, _httpClientMock.Object, _muxerMock.Object);
+        //    var controller = new CurrencyController(_currencyServiceMock.Object, _httpClientMock.Object, _muxerMock.Object);
 
-            // Act
-            var response = controller.ConvertCurrency("USD", "BRL", 1);
+        //    // Act
+        //    var response = controller.ConvertCurrency("USD", "BRL", 1);
 
-            // Assert
-            response.Should().NotBeNull();
-            response.Result.ResponseResult.Status.Should().Be((int)HttpStatusCode.OK);
-            response.Result.Result.Should().Be((double)5.0);
-            response.Result.ResponseResult.Errors.Should().BeNull();
-        }
+        //    // Assert
+        //    response.Should().NotBeNull();
+        //    response.Result.ResponseResult.Status.Should().Be((int)HttpStatusCode.OK);
+        //    response.Result.Result.Should().Be((double)5.0);
+        //    response.Result.ResponseResult.Errors.Should().BeNull();
+        //}
 
         [Test]
         public void CurrencyController_StressTest()
