@@ -1,9 +1,12 @@
+using CurrencyConverter.Api.Settings;
+
 namespace CurrencyConverter.Api.Configuration
 {
     public static class ApiConfig
     {
-        public static IServiceCollection AddApiConfiguration(this IServiceCollection services)
+        public static IServiceCollection AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<AppSettings>(configuration);
             services.AddControllers();
             return services;
         }

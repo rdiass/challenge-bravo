@@ -1,14 +1,19 @@
 using CurrencyConverter.Api.Models;
+using CurrencyConverter.Api.Settings;
 using freecurrencyapi;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace CurrencyConverter.Api.Services
 {
-    public class FiatConvertService : IFiatConvertService
+    public class FiatConvertService : Service, IFiatConvertService
     {
         private readonly Freecurrencyapi _freecurrencyapi;
 
-        public FiatConvertService(HttpClient httpClient) => _freecurrencyapi = new Freecurrencyapi("fca_live_0u1MIS050NxSH7kYGzc6cgtfsp7nQzXGunhOv0xd");
+        public FiatConvertService(HttpClient httpClient, IOptions<AppSettings> appSettings)
+        {
+            _freecurrencyapi = new Freecurrencyapi(appSettings.Value.FreecurrencyapiKey);
+        }
 
         public double ConvertFiatToFiat(string from, string to, double amount)
         {

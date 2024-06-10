@@ -70,6 +70,27 @@ namespace CurrencyConverter.WebApp.MVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult Delete()
+        {
+            FillViewBag();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(CurrencyDeleteViewModel currencyViewModel, string? returnUrl = null)
+        {
+            FillViewBag();
+            ViewData["ReturnUrl"] = returnUrl;
+
+            if (!ModelState.IsValid) return View(currencyViewModel);
+
+            var response = await _currencyConverterService.Delete(currencyViewModel.Code);
+
+            if (ResponseHasErrors(response.ResponseResult)) return View(currencyViewModel);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         private void FillViewBag()
         {
             // Create a SelectListGroup

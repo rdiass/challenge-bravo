@@ -46,6 +46,21 @@ namespace CurrencyConverter.WebApp.MVC.Services
             return await DeserializeObjectResponse<CurrencyResponse>(response);
         }
 
+        public async Task<CurrencyResponse> Delete(string code)
+        {
+            var response = await _httpClient.DeleteAsync(code);
+
+            if (!TryError(response))
+            {
+                return new CurrencyResponse
+                {
+                    ResponseResult = await DeserializeObjectResponse<ResponseResult>(response)
+                };
+            };
+
+            return new CurrencyResponse();
+        }
+
         public async Task<FictionCurrenciesResponse> GetAll()
         {
             var response = await _httpClient.GetAsync("");

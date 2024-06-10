@@ -41,9 +41,9 @@ namespace CurrencyConverter.Api.Data
             return await _currencyDbContext.Currencies.Where(x => codes.Contains(x.Code)).ToListAsync();
         }
 
-        public async Task RemoveAsync(string id)
+        public async Task RemoveAsync(string code)
         {
-            var currencyToDelete = _currencyDbContext.Currencies.FirstOrDefault(c => c.Id == new ObjectId(id));
+            var currencyToDelete = _currencyDbContext.Currencies.FirstOrDefault(c => c.Code == code);
 
             if (currencyToDelete != null)
             {
@@ -71,7 +71,7 @@ namespace CurrencyConverter.Api.Data
             }
             else
             {
-                throw new ArgumentException("The motorcyle to update cannot be found. ");
+                throw new ArgumentException("The currency to update cannot be found. ");
             }
         }
     }

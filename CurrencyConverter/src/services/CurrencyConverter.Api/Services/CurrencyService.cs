@@ -54,7 +54,13 @@ namespace CurrencyConverter.Api.Services
             var currencyModel = await _currencyRepository.GetAsync(id);
             return _mapper.Map<CurrencyViewModel>(currencyModel);
         }
-            
+
+        public async Task<List<CurrencyViewModel>> GetByCodesAsync(List<string> codes)
+        {
+            var currencyModel = await _currencyRepository.GetByCodes(codes);
+            return _mapper.Map<List<CurrencyViewModel>>(currencyModel);
+        }
+
         public async Task<Currency> CreateAsync(CurrencyViewModel newCurrency)
         {
             var currencyModel = _mapper.Map<Currency>(newCurrency);
@@ -67,7 +73,7 @@ namespace CurrencyConverter.Api.Services
             await _currencyRepository.UpdateAsync(id, updateCurrencyModel);
         }
           
-        public async Task RemoveAsync(string id) =>
-            await _currencyRepository.RemoveAsync(id);
+        public async Task RemoveAsync(string code) =>
+            await _currencyRepository.RemoveAsync(code);
     }
 }

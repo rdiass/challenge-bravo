@@ -3,7 +3,6 @@ using CurrencyConverter.Api.Services;
 using CurrencyConverter.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -11,7 +10,7 @@ namespace CurrencyConverter.Api.Controllers
 {
     [ApiController]
     [Route("api/converter")]
-    public class CurrencyController : ControllerBase
+    public class CurrencyController : MainController
     {
         private readonly ICurrencyService _currencyService;
         private readonly HttpClient _client;
@@ -27,11 +26,11 @@ namespace CurrencyConverter.Api.Controllers
 
         [HttpGet]
         [Route("from/{from}/to/{to}/amount/{amount}")]
-        public async Task<CurrencyConverterResponse> ConvertCurrency(string from, string to, double amount)
+        public async Task<IActionResult> ConvertCurrency(string from, string to, double amount)
         {
             try
             {
-                var keyName = $"converter:{from},{to}";
+                var keyName = $"converter:{from},{to},{amount}";
                 var json = await _redis.StringGetAsync(keyName);
                 var response = new CurrencyConverterResponse();
 
@@ -46,20 +45,12 @@ namespace CurrencyConverter.Api.Controllers
                 }
 
                 response = JsonSerializer.Deserialize<CurrencyConverterResponse>(json);
-                response.ResponseResult = new ResponseResult { Status = (int)HttpStatusCode.OK };
-                return response;
+                return CustomResponse(response);
             }
             catch (Exception ex)
             {
-                var responseResult = new ResponseResult
-                {
-                    Status = (int)HttpStatusCode.BadRequest,
-                    Errors = new ResponseErrorMessages
-                    {
-                        Messages = [ex.Message]
-                    }
-                };
-                return new CurrencyConverterResponse { ResponseResult = responseResult };
+                AddError(ex.Message);
+                return CustomResponse();
             }
         }
 
@@ -70,22 +61,44 @@ namespace CurrencyConverter.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(CurrencyViewModel newCurrency)
         {
+            if (!ModelState.IsValid)
+            {
+                return CustomResponse(ModelState);
+            }
+
+            var exist = await _currencyService.GetByCodesAsync([newCurrency.Code]);
+
+            if (exist.Count != 0)
+            {
+                AddError("Currency already exist. Try a new one.");
+                return CustomResponse();
+            }
+
             var response = await _currencyService.CreateAsync(newCurrency);
 
             return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
         }
 
-        [HttpDelete("{id:length(24)}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{code}")]
+        public async Task<IActionResult> Delete(string code)
         {
-            var book = await _currencyService.GetAsync(id);
+            var currency = await _currencyService.GetByCodesAsync([code]);
 
-            if (book is null)
+            if (currency.Count == 0)
             {
                 return NotFound();
             }
 
-            await _currencyService.RemoveAsync(id);
+            try
+            {
+                await _currencyService.RemoveAsync(code);
+
+            }
+            catch (Exception ex)
+            {
+                AddError(ex.Message);
+                return CustomResponse();
+            }
 
             return NoContent();
         }

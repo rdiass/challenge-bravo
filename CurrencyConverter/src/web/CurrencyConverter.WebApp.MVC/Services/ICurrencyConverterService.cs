@@ -8,6 +8,7 @@ namespace CurrencyConverter.WebApp.MVC.Services
         Task<CurrencyConverterResponse> Converter(CurrencyConverterViewModel currencyConverterViewModel);
         Task<CurrencyResponse> Create(CurrencyViewModel currencyViewModel);
         Task<FictionCurrenciesResponse> GetAll();
+        Task<CurrencyResponse> Delete(string code);
     }
 
     public class FictionCurrenciesResponse

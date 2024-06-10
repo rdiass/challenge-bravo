@@ -5,7 +5,7 @@ using StackExchange.Redis;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddApiConfiguration();
+builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddMongoDbConfig(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();
 builder.Services.RegisterServices();

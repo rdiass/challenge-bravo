@@ -1,5 +1,7 @@
 using CurrencyConverter.Api.Helpers;
 using CurrencyConverter.Api.Models;
+using CurrencyConverter.Api.Settings;
+using Microsoft.Extensions.Options;
 using System.Net.Http;
 
 namespace CurrencyConverter.Api.Services
@@ -15,10 +17,10 @@ namespace CurrencyConverter.Api.Services
             new CurrencyCode("ETH", "ethereum/")
         ];
 
-        public BitCoinConvertService(IFiatConvertService fiatConvertService, HttpClient httpClient)
+        public BitCoinConvertService(IFiatConvertService fiatConvertService, HttpClient httpClient, IOptions<AppSettings> appSettings)
         {
             _fiatConvertService = fiatConvertService;
-            httpClient.BaseAddress = new Uri("https://api.alternative.me/v2/ticker/");
+            httpClient.BaseAddress = new Uri(appSettings.Value.CryptoExternalUrl);
             _httpClient = httpClient;
         }
 
