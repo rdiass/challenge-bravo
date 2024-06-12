@@ -21,14 +21,19 @@ namespace CurrencyConverter.Api.Services
             {
                 var currency = _freecurrencyapi.Latest(from, to);
                 var quote = JsonSerializer.Deserialize<Quote>(currency);
-                var quoteValue = quote.data[to];
-                var response = amount * quoteValue;
 
-                return response;
+                if (quote != null)
+                {
+                    var quoteValue = quote.data[to];
+                    var response = amount * quoteValue;
+                    return response;
+                }
+                throw new Exception($"Error executing FreecurrencyApi - Not supported currency: from {from} or to {to}");
+
             }
             catch (Exception ex)
             {
-                throw new Exception("Not supported currency: " + ex.Message);
+                throw new Exception("FreecurrencyApi error: " + ex.Message);
             }
         }
     }

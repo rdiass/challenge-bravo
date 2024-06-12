@@ -31,7 +31,7 @@ namespace CurrencyConverter.Api.Controllers
             try
             {
                 var keyName = $"converter:{from},{to},{amount}";
-                var json = await _redis.StringGetAsync(keyName);
+                var json = _redis.StringGet(keyName);
                 var response = new CurrencyConverterResponse();
 
                 if (string.IsNullOrEmpty(json))
