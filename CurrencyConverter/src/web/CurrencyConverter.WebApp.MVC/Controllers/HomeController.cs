@@ -72,14 +72,14 @@ namespace CurrencyConverter.WebApp.MVC.Controllers
 
         public IActionResult Delete()
         {
-            FillViewBag();
+            FillFictionViewBag();
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(CurrencyDeleteViewModel currencyViewModel, string? returnUrl = null)
         {
-            FillViewBag();
+            FillFictionViewBag();
             ViewData["ReturnUrl"] = returnUrl;
 
             if (!ModelState.IsValid) return View(currencyViewModel);
@@ -89,6 +89,20 @@ namespace CurrencyConverter.WebApp.MVC.Controllers
             if (ResponseHasErrors(response.ResponseResult)) return View(currencyViewModel);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        private void FillFictionViewBag()
+        {
+            // Create a SelectListGroup
+            var response = _currencyConverterService.GetAll().Result;
+            var fictionCurrencies = new List<CurrencyCode>();
+            foreach (var currency in response.Currencies)
+            {
+                fictionCurrencies.Add(new CurrencyCode(currency.Code, "", $"{currency.Code} - {currency.Name}"));
+            }
+
+            var listItems = new SelectList(fictionCurrencies, "Code", "Name", "");
+            ViewBag.SelectedList = listItems;
         }
 
         private void FillViewBag()
